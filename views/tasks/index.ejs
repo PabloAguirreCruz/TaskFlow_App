@@ -1,0 +1,88 @@
+<%- include('../partials/head') %>
+
+<div class="page-header">
+  <h1>My Tasks</h1>
+  <a href="/tasks/new" class="btn btn-primary">+ New Task</a>
+</div>
+
+<div class="filters">
+  <form action="/tasks" method="GET" class="filter-form">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All Statuses</option>
+      <option value="todo" <%= filters.status === 'todo' ? 'selected' : '' %>>To Do</option>
+      <option value="in-progress" <%= filters.status === 'in-progress' ? 'selected' : '' %>>In Progress</option>
+      <option value="done" <%= filters.status === 'done' ? 'selected' : '' %>>Done</option>
+    </select>
+    
+    <select name="priority" onchange="this.form.submit()">
+      <option value="">All Priorities</option>
+      <option value="high" <%= filters.priority === 'high' ? 'selected' : '' %>>High</option>
+      <option value="medium" <%= filters.priority === 'medium' ? 'selected' : '' %>>Medium</option>
+      <option value="low" <%= filters.priority === 'low' ? 'selected' : '' %>>Low</option>
+    </select>
+    
+    <select name="category" onchange="this.form.submit()">
+      <option value="">All Categories</option>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat._id %>" <%= filters.category === cat._id.toString() ? 'selected' : '' %>><%= cat.name %></option>
+      <% }) %>
+    </select>
+    
+    <select name="sort" onchange="this.form.submit()">
+      <option value="">Sort: Newest</option>
+      <option value="dueDate" <%= filters.sort === 'dueDate' ? 'selected' : '' %>>Sort: Due Date</option>
+      <option value="priority" <%= filters.sort === 'priority' ? 'selected' : '' %>>Sort: Priority</option>
+    </select>
+    
+    <% if (filters.status || filters.priority || filters.category || filters.sort) { %>
+      <a href="/tasks" class="btn btn-outline btn-sm">Clear Filters</a>
+    <% } %>
+  </form>
+</div>
+
+<% if (tasks.length === 0) { %>
+  <div class="empty-state">
+    <p>No tasks found. <a href="/tasks/new">Create your first task!</a></p>
+  </div>
+<% } else { %>
+  <div class="task-list">
+    <% tasks.forEach(task => { %>
+      <div class="task-card status-<%= task.status %>">
+        <div class="task-header">
+          <div class="task-title-row">
+            <span class="priority-badge priority-<%= task.priority %>"><%= task.priority %></span>
+            <a href="/tasks/<%= task._id %>" class="task-title"><%= task.title %></a>
+          </div>
+          <div class="task-actions">
+            <form action="/tasks/<%= task._id %>/status?_method=PATCH" method="POST" class="status-form">
+              <select name="status" onchange="this.form.submit()" aria-label="Change task status">
+                <option value="todo" <%= task.status === 'todo' ? 'selected' : '' %>>To Do</option>
+                <option value="in-progress" <%= task.status === 'in-progress' ? 'selected' : '' %>>In Progress</option>
+                <option value="done" <%= task.status === 'done' ? 'selected' : '' %>>Done</option>
+              </select>
+            </form>
+          </div>
+        </div>
+        
+        <% if (task.description) { %>
+          <p class="task-description"><%= task.description.substring(0, 100) %><%= task.description.length > 100 ? '...' : '' %></p>
+        <% } %>
+        
+        <div class="task-meta">
+          <% if (task.categoryId) { %>
+            <span class="category-tag" style="background-color: <%= task.categoryId.color %>20; color: <%= task.categoryId.color %>; border: 1px solid <%= task.categoryId.color %>">
+              <%= task.categoryId.name %>
+            </span>
+          <% } %>
+          <% if (task.dueDate) { %>
+            <span class="due-date <%= new Date(task.dueDate) < new Date() && task.status !== 'done' ? 'overdue' : '' %>">
+              Due: <%= new Date(task.dueDate).toLocaleDateString() %>
+            </span>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>

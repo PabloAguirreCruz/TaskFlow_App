@@ -1,0 +1,53 @@
+<%- include('../partials/head') %>
+
+<div class="page-header">
+  <h1>Edit Category</h1>
+  <a href="/categories" class="btn btn-outline">← Back to Categories</a>
+</div>
+
+<% if (error) { %>
+  <div class="alert alert-error"><%= error %></div>
+<% } %>
+
+<div class="form-container">
+  <form action="/categories/<%= category._id %>?_method=PUT" method="POST" class="form">
+    <div class="form-group">
+      <label for="name">Name *</label>
+      <input 
+        type="text" 
+        id="name" 
+        name="name" 
+        required 
+        maxlength="50"
+        value="<%= category.name %>"
+      >
+    </div>
+    
+    <div class="form-group">
+      <label for="color">Color</label>
+      <div class="color-input-wrapper">
+        <input 
+          type="color" 
+          id="color" 
+          name="color" 
+          value="<%= category.color %>"
+        >
+        <span class="color-preview" id="colorPreview"><%= category.color %></span>
+      </div>
+      <small>Choose a color to help identify this category</small>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Update Category</button>
+      <a href="/categories" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.getElementById('color').addEventListener('input', function(e) {
+    document.getElementById('colorPreview').textContent = e.target.value;
+  });
+</script>
+
+<%- include('../partials/footer') %>

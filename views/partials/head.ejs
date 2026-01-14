@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' | ' : '' %>TaskFlow</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <a href="/" class="logo">
+        <span class="logo-icon">✓</span>
+        TaskFlow
+      </a>
+      <ul class="nav-links">
+        <% if (user) { %>
+          <li><a href="/tasks">Tasks</a></li>
+          <li><a href="/categories">Categories</a></li>
+          <li class="user-info">
+            <span>Hello, <%= user.username %></span>
+            <a href="/auth/sign-out" class="btn btn-outline btn-sm">Sign Out</a>
+          </li>
+        <% } else { %>
+          <li><a href="/auth/sign-in">Sign In</a></li>
+          <li><a href="/auth/sign-up" class="btn btn-primary btn-sm">Sign Up</a></li>
+        <% } %>
+      </ul>
+    </nav>
+  </header>
+  <main class="main">

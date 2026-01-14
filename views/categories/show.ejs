@@ -1,0 +1,54 @@
+<%- include('../partials/head') %>
+
+<div class="page-header">
+  <a href="/categories" class="btn btn-outline">← Back to Categories</a>
+  <div class="header-actions">
+    <a href="/categories/<%= category._id %>/edit" class="btn btn-outline">Edit</a>
+    <form action="/categories/<%= category._id %>?_method=DELETE" method="POST" class="inline-form" onsubmit="return confirm('Delete this category? Tasks will not be deleted, just uncategorized.')">
+      <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+</div>
+
+<div class="category-detail">
+  <div class="category-detail-header" style="border-left: 4px solid <%= category.color %>">
+    <div class="category-color-large" style="background-color: <%= category.color %>"></div>
+    <h1><%= category.name %></h1>
+  </div>
+  
+  <div class="category-tasks-section">
+    <div class="section-header">
+      <h2>Tasks in this Category (<%= tasks.length %>)</h2>
+      <a href="/tasks/new" class="btn btn-primary btn-sm">+ Add Task</a>
+    </div>
+    
+    <% if (tasks.length === 0) { %>
+      <div class="empty-state">
+        <p>No tasks in this category yet.</p>
+      </div>
+    <% } else { %>
+      <div class="task-list">
+        <% tasks.forEach(task => { %>
+          <div class="task-card status-<%= task.status %>">
+            <div class="task-header">
+              <div class="task-title-row">
+                <span class="priority-badge priority-<%= task.priority %>"><%= task.priority %></span>
+                <a href="/tasks/<%= task._id %>" class="task-title"><%= task.title %></a>
+              </div>
+              <span class="status-badge status-<%= task.status %>">
+                <%= task.status === 'todo' ? 'To Do' : task.status === 'in-progress' ? 'In Progress' : 'Done' %>
+              </span>
+            </div>
+            <% if (task.dueDate) { %>
+              <span class="due-date <%= new Date(task.dueDate) < new Date() && task.status !== 'done' ? 'overdue' : '' %>">
+                Due: <%= new Date(task.dueDate).toLocaleDateString() %>
+              </span>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
