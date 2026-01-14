@@ -1,0 +1,71 @@
+TaskFlow App
+
+---------------------------
+
+USER STORIES
+------------
+
+
+
+As a user, I want to be able to sign up and log in to my account so that I can have my own personal task list that only I can access.
+
+As a user, I want to be able to create new tasks with important details like the title, description, priority level (low, medium, high), status (to-do, in-progress, done), and an optional due date.
+
+As a user, I want to see all my tasks in one place. This page should show the task title, priority, status, and due date to keep it organized and easy to scan.
+
+As a user, I want to be able to filter my tasks by status, priority, or category so I can quickly find what I'm looking for.
+
+As a user, I need to be able to click on any task in my list and see all the details about it on a new page. This includes everything I've recorded about that task.
+
+As a user, when I'm looking at all the details of a task, I want to be able to change any of the information. There should be an easy-to-find link that takes me to a different page where I can make these changes and then save them.
+
+As a user, if I'm looking at the details of a task, I want a simple way to delete it completely, like clicking a 'Delete' button.
+
+As a user, I want to quickly change a task's status from the main list without having to go into the edit page.
+
+As a user, I want to create categories with custom names and colors so I can organize my tasks into groups (like "Work", "Personal", "Shopping").
+
+As a user, I want to assign tasks to categories so I can keep related tasks together.
+
+As a user, I want to view all tasks within a specific category on one page.
+
+As a user, I want to edit and delete categories. When I delete a category, the tasks should remain but become uncategorized.
+
+
+
+RESTFUL ROUTES 
+--------------
+
+Authentication Routes:
+Action      Route               HTTP Verb   Description
+------      -----               ---------   -----------
+New         /auth/sign-up       GET         Show sign up form
+Create      /auth/sign-up       POST        Create new user
+New         /auth/sign-in       GET         Show sign in form
+Create      /auth/sign-in       POST        Authenticate user
+Destroy     /auth/sign-out      GET         Log out user
+
+
+Task Routes:
+Action      Route               HTTP Verb   Description
+------      -----               ---------   -----------
+Index       /tasks              GET         Show all tasks for current user
+New         /tasks/new          GET         Show create task form
+Create      /tasks              POST        Save new task
+Show        /tasks/:id          GET         Show single task details
+Edit        /tasks/:id/edit     GET         Show edit task form
+Update      /tasks/:id          PUT         Save task changes
+Delete      /tasks/:id          DELETE      Remove task
+Update      /tasks/:id/status   PATCH       Quick status update
+
+
+Category Routes:
+Action      Route                   HTTP Verb   Description
+------      -----                   ---------   -----------
+Index       /categories             GET         Show all categories
+New         /categories/new         GET         Show create category form
+Create      /categories             POST        Save new category
+Show        /categories/:id         GET         Show category with its tasks
+Edit        /categories/:id/edit    GET         Show edit category form
+Update      /categories/:id         PUT         Save category changes
+Delete      /categories/:id         DELETE      Remove category
