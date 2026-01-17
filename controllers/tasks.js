@@ -63,13 +63,17 @@ router.post('/', async (req, res) => {
       userId: req.session.user._id,
     });
 
+    
+  
+    req.flash('success', 'Task created successfully!');  
     res.redirect('/tasks');
-  } catch (error) {
+      } catch (error) {
     console.error(error);
+    req.flash('error', 'Failed to create task');
     const categories = await Category.find({ userId: req.session.user._id });
     res.render('tasks/new', { categories, error: 'Failed to create task' });
-  }
-});
+      }
+    });
 
 // GET /tasks/:id
 router.get('/:id', async (req, res) => {
@@ -129,12 +133,14 @@ router.put('/:id', async (req, res) => {
     );
 
     if (!task) {
+      req.flash('error', 'Task not found');
       return res.redirect('/tasks');
     }
-
+    req.flash('success', 'Task updated successfully!');
     res.redirect(`/tasks/${task._id}`);
   } catch (error) {
     console.error(error);
+    req.flash('error', 'Failed to update task');
     res.redirect('/tasks');
   }
 });
@@ -146,10 +152,11 @@ router.delete('/:id', async (req, res) => {
       _id: req.params.id,
       userId: req.session.user._id,
     });
-
+    req.flash('success', 'Task deleted');
     res.redirect('/tasks');
   } catch (error) {
     console.error(error);
+    req.flash('error', 'Failed to delete task');
     res.redirect('/tasks');
   }
 });
@@ -163,10 +170,11 @@ router.patch('/:id/status', async (req, res) => {
       { _id: req.params.id, userId: req.session.user._id },
       { status }
     );
-
+    req.flash('success', 'Status updated!');
     res.redirect('/tasks');
   } catch (error) {
     console.error(error);
+    req.flash('error', 'Failed to update status'); 
     res.redirect('/tasks');
   }
 });

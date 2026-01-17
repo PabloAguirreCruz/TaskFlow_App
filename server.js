@@ -37,6 +37,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const flash = require('connect-flash');
+
+
 // Session configuration
 app.use(
   session({
@@ -54,6 +57,15 @@ app.use(
     proxy: process.env.NODE_ENV === 'production',
   })
 );
+
+app.use(flash());
+
+// Make flash messages available to all views
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 // Pass user to all views
 app.use((req, res, next) => {
